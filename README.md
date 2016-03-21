@@ -1,2 +1,2 @@
 # Dron-FIUNAM
-Mathematical modelling and control for a qadcopter in X configuration.
+Mathematical modelling and control for a quadcopter in X configuration.
