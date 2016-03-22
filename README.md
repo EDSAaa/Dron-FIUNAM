@@ -23,7 +23,7 @@ This repository includes both the programs that were made for obtain the mathema
 
 ### LabVIEW ###
 
-This folder contains the interface that allow the operator manipulate the desired *z*, and watch the graphics of the behavior of the system variables.
+This folder contains the interface that allows the operator manipulate the desired *z*, and watch the graphics of the system variables behavior.
 
 ### Mathematica ###
 
