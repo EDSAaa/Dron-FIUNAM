@@ -40,7 +40,7 @@ There are two files.
 
 ### Teensy v3-1 ###
 
-Here are two folders. 
+Here are two programs written in Wiring (C for Arduino). 
 
-- One program contains the implementation of MultiWii Serial Protocol, whose purpose is allow Tensy request the values of the sensors to the Flight Controller. With those measurements was implemented a State Feedback Controller, 
+- One program contains the implementation of MultiWii Serial Protocol, whose purpose is allow Tensy request the values of the sensors to the Flight Controller. With those measurements was implemented a State Feedback Controller.
 - The other has the same Controller, but additionally has a Reduced Order Observer that estimates the value of *dz/dt*.  
