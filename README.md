@@ -38,7 +38,7 @@ There are two files.
 - One is a .m script that contains the numeric parameters of the dron. In this file was designed a LQR Controller and a Reduced Order Observer.
 - The other is a Simulink file, which has the necessary blocks for simulating the response of the system (model linear and non linear) with  the controller and observer implemented. 
 
-### Teensy v3-1 ###
+### Teensy v3.1 ###
 
 Here are two programs written in Wiring (C for Arduino). 
 
