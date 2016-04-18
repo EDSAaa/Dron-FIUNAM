@@ -1,5 +1,6 @@
-//Cabecera del controlador
+//Cabeceras del controlador y del observador
 #include "Controlador.h"
+#include "Observador.h"
 
 //Cabecera del protocolo de comunicación
 #include "protocol.h"
@@ -39,11 +40,19 @@ XYAngle angles;
 Altitude alt;
 IMUValues imu;
 
+//Variables para el observador
+float zauxBefore = 0;
+float velzObs = 0;
+float omega1eq = 0; //ub=u-U
+float omega2eq = 0;
+float omega3eq = 0;
+float omega4eq = 0;
+
+
 void setup()  
 {
-  Serial.begin(BAUD); //Monitor Serial PC
-  Serial1.begin(BAUD); //Multiwii
   Serial2.begin(BAUD);  //telemetría
+  Serial1.begin(BAUD); //Multiwii
 
   //Declaración de los pines de los motores
   Mot1.attach(PINMOTOR1);
@@ -53,7 +62,7 @@ void setup()
 
   //Inicialización
   escCalibration();
-  delay(10000);
+  delay(1000);
   inicialization();
   startMotors();
 }
@@ -87,13 +96,14 @@ void loop() //Bucle principal
     startMotors();
     delay(2000);
   }
-  else if (aux!=254) //Si no llegó paro, ejecuta el controlador
-  {
-    zRef=(float)(aux/100.00);  //Zref en metros
-    control(zRef,angles.angleX,angles.angleY,angles.heading,alt.value,alt.vel,imu.gyroX,imu.gyroY,imu.gyroZ);
+  else if(aux!=254) //Si no llegó paro, ejecutan el controlador y el observador
+  { 
+    zRef=(float)(aux/100.00); //Zref en metros
+    velzObs=observador(zRef,angles.angleX,angles.angleY,angles.heading,alt.value,imu.gyroX,imu.gyroY,imu.gyroZ,&omega1eq,&omega2eq,&omega3eq,&omega4eq,&zauxBefore); //Se emplea un observador para estimar velocidad en z de equilibrio actual
+    control(zRef,angles.angleX,angles.angleY,angles.heading,alt.value,velzObs,imu.gyroX,imu.gyroY,imu.gyroZ,&omega1eq,&omega2eq,&omega3eq,&omega4eq);
     tf=millis(); //Se verifica el tiempo final
     delay(Ts-(tf-ti)); //Se asegura que el periodo de muestreo sea constante
-  } 
+  }
 }
 
 void readData() {
@@ -145,25 +155,26 @@ void readData() {
           angles = p.evalAtt(inBuf);
         }
         if (commandMW == MSP_ALTITUDE) {
-          alt = p.evalAlt(inBuf);
+          alt = p.evalAlt(inBuf); 
         }
         if (commandMW == MSP_RAW_IMU) {
           imu = p.evalIMU(inBuf);
-        } 
+        }
+        
       } 
-      
+
       c_state = IDLE;
     }
 
   }
 }
 
-
 void inicialization(void)
 {
   //Se espera a que se reciba un 254 para arrancar los motores
   while(inicializationAux!=254)
   {
+
     uint8_t  datad = 0;
     uint8_t  *data = & datad;
     p.send_msp( MSP_ATTITUDE  ,data, 0);
@@ -172,16 +183,18 @@ void inicialization(void)
     readData();
     p.send_msp( MSP_RAW_IMU  ,data, 0);
     readData();
-    delay(Ts);
     
     if(Serial2.available()>0)
     {
       inicializationAux=Serial2.read();
+      Serial2.write(inicializationAux);
     }
+   
   }
   
   inicializationAux=0;
-  Serial2.write((byte *)"INICIO",6);
+  Serial2.write((byte *)"INICIO",2);
   delay(1000);
 }
+
 
