@@ -92,12 +92,6 @@ void control(float zr, int16_t ax, int16_t ay, int16_t az, int16_t al, int16_t v
   angy = -ay/10.0*pi/180;
   angz = -az*pi/180;
 
-  //Ángulos para generar gráficas en grados
-  /*
-  ANGULOX=ax/10.0;
-  ANGULOY=-ay/10.0;
-  ANGULOZ=-az;
-  */
   
   z = al/100.0; //Altura en m
   velz = vz/100.0;  //Velocidad en m/s
@@ -108,10 +102,10 @@ void control(float zr, int16_t ax, int16_t ay, int16_t az, int16_t al, int16_t v
   gyroz = -gz/4.096*pi/180;
 
   //ECUACIONES DEL CONTROLADOR (Cálculo de las omegas del sistema trasladado al punto de equilibrio)
-  omega1 = 91.14*angx - 91.27*angy + 14.3*angz + 46.14*gyrox - 46.25*gyroy + 46.78*gyroz - 66.22*velz - 15.64*z + 15.64*zr;
-  omega2 = 15.64*zr - 91.27*angy - 14.3*angz - 46.14*gyrox - 46.25*gyroy - 46.78*gyroz - 66.22*velz - 15.64*z - 91.14*angx;
-  omega3 = 91.27*angy - 91.14*angx + 14.3*angz - 46.14*gyrox + 46.25*gyroy + 46.78*gyroz - 66.22*velz - 15.64*z + 15.64*zr;
-  omega4 = 91.14*angx + 91.27*angy - 14.3*angz + 46.14*gyrox + 46.25*gyroy - 46.78*gyroz - 66.22*velz - 15.64*z + 15.64*zr;
+  omega1 = 91.14*angx - 91.27*angy + 14.3*angz + 46.14*gyrox - 46.25*gyroy + 46.78*gyroz - 92.35*velz - 49.25*(z-zr);
+  omega2 = - 91.14*angx - 91.27*angy - 14.3*angz - 46.14*gyrox - 46.25*gyroy - 46.78*gyroz - 92.35*velz - 49.25*(z-zr);
+  omega3 = 91.27*angy - 91.14*angx + 14.3*angz - 46.14*gyrox + 46.25*gyroy + 46.78*gyroz - 92.35*velz - 49.25*(z-zr);
+  omega4 = 91.14*angx + 91.27*angy - 14.3*angz + 46.14*gyrox + 46.25*gyroy - 46.78*gyroz - 92.35*velz - 49.25*(z-zr);
 
   //Cálculo de las omegas del sistema
   omega1 += OMEGAEQ;
