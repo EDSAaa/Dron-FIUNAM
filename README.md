@@ -15,7 +15,7 @@ The dron has the components that are listed below:
 - LiPo Battery Turnigy Nanotech 3S 45~90C 1300 [mAh]
 - 3D printed frame class 250
 
-The operation of the quadcopter is as follows. The FC was programmed with a release of MultiWii, only for use it like a Data Acquisition Module. And on the other hand Teensy has implemented the MultiWii Serial Protocol (MSP) to request all the sensor data to the FC. Simultaneously, this microcontroller calculates a State Feedback Controller and sends the PWM signals to the brushless motors.
+The operation of the quadcopter is as follows. On the one hand, The FC was programmed with a release of MultiWii, only for use it like a Data Acquisition Module. And on the other hand Teensy has implemented the MultiWii Serial Protocol (MSP) to request all the sensor data to the FC. Simultaneously, this microcontroller calculates a State Feedback Controller and sends the PWM signals to the brushless motors.
 
 The State Feedback controller only consider 8 states (which can be measured with the FC): *z*, *roll*, *pitch*, *yaw*, and its derivatives with respect to time. Thats why the controller only can only adjust the height, but not the *xy* position.
  
@@ -33,14 +33,14 @@ Because all the model was obtained symbolically, you can use this program to obt
 
 ### Matlab ###
 
-There are two files.
+There are some files.
 
-- One is a .m script that contains the numeric parameters of the dron. In this file was designed a LQR Controller and a Reduced Order Observer.
-- The other is a Simulink file, which has the necessary blocks for simulating the response of the system (model linear and non linear) with  the controller and observer implemented. 
+- One is a .m script that contains the numeric parameters of the dron. In this file was designed a LQR Controller.
+- Other is a Simulink file, which has the necessary blocks for simulating the response of the system (model linear and non linear) with  the controller implemented.
+- There is a file that simulates the effects noise in the mesure of z.
 
 ### Teensy v3.1 ###
 
-Here are two programs written in Wiring (C for Arduino). 
+Here are one program written in Wiring (C for Arduino). 
 
-- One program contains the implementation of MultiWii Serial Protocol, whose purpose is allow Tensy request the values of the sensors to the Flight Controller. And with those vales it calculates a State Feedback Controller.
-- The other has the same Controller, but additionally it includes a Reduced Order Observer that estimates the value of *dz/dt*.  
+The program contains the implementation of MultiWii Serial Protocol, whose purpose is allow Tensy request the values of the sensors to the Flight Controller. And with those vales it calculates a State Feedback Controller.
